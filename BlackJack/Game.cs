@@ -85,7 +85,7 @@ namespace BlackJack
             }
         }
 
-        private void MixDeck() // Перемешиваем колоду
+        private void MixDeck() 
         {
             int i, j;
             Cards temp;
@@ -183,19 +183,19 @@ namespace BlackJack
         {
             if (player.NumberOfCards == 2 && player.SumPoints == 21)
             {
-                player.Result = Result.blackJack;
+                player.Result = Result.BlackJack;
             }
             if (player.NumberOfCards != 2 && player.SumPoints == 21)
             {
-                player.Result = Result.twentyOne;
+                player.Result = Result.TwentyOne;
             }
             if (player.SumPoints > 21)
             {
-                player.Result = Result.toMany;
+                player.Result = Result.ToMany;
             }
             if (player.SumPoints < 21)
             {
-                player.Result = Result.lessTwentyOne;
+                player.Result = Result.LessTwentyOne;
             }
         }
 
@@ -219,15 +219,15 @@ namespace BlackJack
         {
             if (player.SumPoints == _croupier.SumPoints)
             {
-                return Result.equalCroupier;
+                return Result.EqualCroupier;
             }
             if (player.SumPoints > _croupier.SumPoints)
             {
-                return Result.moreCroupier;
+                return Result.MoreCroupier;
             }
             if (player.SumPoints < _croupier.SumPoints)
             {
-                return Result.lessCroupier;
+                return Result.LessCroupier;
             }
             return "";
         }
