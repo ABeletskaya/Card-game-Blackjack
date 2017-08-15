@@ -8,13 +8,13 @@ namespace BlackJack
 {
    static class Result
     {
-        public const string blackJack = "Blackjack";
-        public const string twentyOne = "Twenty one";
-        public const string lessTwentyOne = "Less points than Twenty one";       
-        public const string toMany = "To many...";
+        public const string BlackJack = "Blackjack";
+        public const string TwentyOne = "Twenty one";
+        public const string LessTwentyOne = "Less points than Twenty one";       
+        public const string ToMany = "To many...";
 
-        public const string moreCroupier = "More than croupier has";
-        public const string lessCroupier = "Less than croupier has";
-        public const string equalCroupier = "Equals with croupier";
+        public const string MoreCroupier = "More than croupier has";
+        public const string LessCroupier = "Less than croupier has";
+        public const string EqualCroupier = "Equals with croupier";
     }
 }
