@@ -51,7 +51,6 @@
     <Compile Include="Models\Enums\ActionWithGame.cs" />
     <Compile Include="Result\ConsiderWinning.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="InitializeBlackJack.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

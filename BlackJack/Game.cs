@@ -8,68 +8,48 @@ namespace BlackJack
 {
     class Game
     {
+        private Player _player;
         private Player _croupier;
-        private List<Player> _players = new List<Player>();
-        private int _playersCount;
-
+        
         private Random _random = new Random();
         private Cards[] _cardsDeck = new Cards[52];
 
-        public Game(Dictionary<string, int> _playersDictionary)
+        private ConsiderWinning considerWinning;
+
+        public Game(string name, double rate)
         {
-            _playersCount = _playersDictionary.Count();
-            foreach (var player in _playersDictionary)
-            {
-                if (player.Key.Length == 0)
-                {
-                    return;
-                }
-                _players.Add(new Player(player.Key, player.Value));
-            }
+            considerWinning = new ConsiderWinning();
+
+            _player = new Player(name, rate);
             _croupier = new Player("Croupier");
-        }
+        }       
 
-        public void BlackJack()
+        public double BlackJack()
         {
-            FormDeck(); 
+            FormDeck();
             MixDeck();
-            Console.WriteLine("\n");
+            Console.WriteLine(StringHelper.LetPlay);
 
-            while (NeedMoreCard())
+            while (_player.MoreCard)
             {
-                for (int k = 0; k < _playersCount; k++)
-                {
-                    if (_players[k].MoreCard)
-                    {
-                        Distribution(_players[k]);
-                    }
-                }
+                Distribution(_player);
+
                 if (_croupier.NumberOfCards == 0)
                 {
                     AddCard(_croupier, true);
-                }
+                }           
             }
+            GetResult(_player);
             while (_croupier.SumPoints < 17)
             {
                 AddCard(_croupier, true);
             }
-
-            foreach (var player in _players)
-            {
-                GetResult(player);
-            }
             GetResult(_croupier);
+            var coeficient = considerWinning.CoeficientWin(_croupier, _player);
+            _player.Win = _player.Rate * 2 * coeficient;
             PrintResult();
-        }
-
-        private bool NeedMoreCard()
-        {
-            if (_players.Any(p => p.MoreCard == true))
-            {
-                return true;
-            }
-            return false;
-        }
+            return _player.Win;
+        }       
 
         private void FormDeck()
         {
@@ -101,17 +81,22 @@ namespace BlackJack
 
         private void Distribution(Player player)
         {
-            if (player.NumberOfCards == 0) 
+            if (player.NumberOfCards == 0)
             {
                 Console.WriteLine($"\t{player.Name} player cards:");
                 AddCard(player);
                 AddCard(player);
+                ControlMoreCard(player);
                 Console.WriteLine($"The sum of {player.Name} player cards is: {player.SumPoints}\n\n");
                 return;
             }
             AddCard(player);
+            ControlMoreCard(player);
+        }
 
-            if (! (player.SumPoints < 21))
+        private static void ControlMoreCard(Player player)
+        {
+            if (!(player.SumPoints < 21))
             {
                 player.MoreCard = false;
             }
@@ -139,7 +124,7 @@ namespace BlackJack
                 return;
             }
 
-            Console.WriteLine($"{player.Name}" + ResponsesHelper.MoreCard);
+            Console.WriteLine($"{player.Name}" + StringHelper.MoreCard);
             string answer = Console.ReadLine();
             if ( ! (answer == "Y" || answer == "y"))
             {
@@ -183,51 +168,43 @@ namespace BlackJack
         {
             if (player.NumberOfCards == 2 && player.SumPoints == 21)
             {
-                player.Result = Result.BlackJack;
+                player.Result = StringHelper.BlackJack;
             }
             if (player.NumberOfCards != 2 && player.SumPoints == 21)
             {
-                player.Result = Result.TwentyOne;
+                player.Result = StringHelper.TwentyOne;
             }
             if (player.SumPoints > 21)
             {
-                player.Result = Result.ToMany;
+                player.Result = StringHelper.ToMany;
             }
             if (player.SumPoints < 21)
             {
-                player.Result = Result.LessTwentyOne;
+                player.Result = StringHelper.LessTwentyOne;
             }
         }
 
         public void PrintResult()
         {
-            double coeficient = -1.0;
-            string compare = "";
             Console.WriteLine("\n");
             Console.WriteLine($"Croupier has {_croupier.Result} and his sum point is {_croupier.SumPoints}");
-            ConsiderWinning considerWinning = new ConsiderWinning();
-            foreach (var player in _players)
-            {             
-                coeficient = considerWinning.CoeficientWin(_croupier, player);
-                compare = compareCroupier(player);
-                Console.WriteLine($"{ player.Name} -  winnings is {player.Rate * 2 * coeficient} \n"+
-                                   $"(has {player.SumPoints}, result is {player.Result} and {compare})");
-            }
-        } 
-        
+            Console.WriteLine($"{ _player.Name} -  winnings is {_player.Win} \n" +
+                                          $"(has {_player.SumPoints}, result is {_player.Result} and {compareCroupier(_player)})");
+        }
+
         public string compareCroupier(Player player)
         {
             if (player.SumPoints == _croupier.SumPoints)
             {
-                return Result.EqualCroupier;
+                return StringHelper.EqualCroupier;
             }
             if (player.SumPoints > _croupier.SumPoints)
             {
-                return Result.MoreCroupier;
+                return StringHelper.MoreCroupier;
             }
             if (player.SumPoints < _croupier.SumPoints)
             {
-                return Result.LessCroupier;
+                return StringHelper.LessCroupier;
             }
             return "";
         }

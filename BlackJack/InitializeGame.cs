@@ -62,10 +62,9 @@ namespace BlackJack
         private static int NewGame(double winning)
         {
             int answer;
-            PrintMenu(winning);
-
-            Console.WriteLine($"NewGame method {winning}");
             int numAction = (winning > 0) ? (int)ActionWithGame.Countinue : (int)ActionWithGame.NewPlayer;
+
+            PrintMenu(winning);            
             while (!(int.TryParse(Console.ReadLine(), out answer)))
             {
                 PrintMenu(winning);
