@@ -43,22 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardsInfo\Cards.cs" />
-    <Compile Include="CardsInfo\CardsName.cs" />
-    <Compile Include="CardsInfo\CardsSuit.cs" />
-    <Compile Include="Result\CoeficientDouble.cs" />
+    <Compile Include="InitializeGame.cs" />
+    <Compile Include="Models\Cards.cs" />
+    <Compile Include="Models\Enums\CardsName.cs" />
+    <Compile Include="Models\Enums\CardsSuit.cs" />
+    <Compile Include="Models\Enums\CoeficientDouble.cs" />
+    <Compile Include="Models\Enums\ActionWithGame.cs" />
     <Compile Include="Result\ConsiderWinning.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="InitializeBlackJack.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponsesHelper.cs" />
-    <Compile Include="Result\Result.cs" />
+    <Compile Include="Common\StringHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

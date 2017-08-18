@@ -10,55 +10,62 @@ namespace BlackJack
     {
         public static void BeginGame()
         {
-            Dictionary<string, int> _players = new Dictionary<string, int>();
-            int _playersNumber = 0;
+            Dictionary<string, int> players = new Dictionary<string, int>();
+            int playersNumber = 0;
 
-            Console.WriteLine(ResponsesHelper.NumberPlayers);
-            if (! int.TryParse(Console.ReadLine(), out _playersNumber))
+            Console.WriteLine(StringHelper.NumberPlayers);
+            if (!int.TryParse(Console.ReadLine(), out playersNumber))
             {
-                Console.WriteLine(ResponsesHelper.ControlPlayers);
+                Console.WriteLine(StringHelper.ControlPlayers);
                 BeginGame();
             }
 
-            if ( ! (_playersNumber > 0 && _playersNumber <= 7))
+            if (!(playersNumber > 0 && playersNumber <= 7))
             {
-                Console.WriteLine(ResponsesHelper.ControlPlayers);
+                Console.WriteLine(StringHelper.ControlPlayers);
                 if (!NewGame())
                 {
                     return;
                 }
                 BeginGame();
             }
-
             string name;
             int rate;
-            for (int i = 0; i < _playersNumber; i++)
+            for (int i = 0; i < playersNumber; i++)
             {
-                Console.WriteLine(ResponsesHelper.NamePlayer + $" {i + 1} :");
-                name = Console.ReadLine();
-                Console.WriteLine(ResponsesHelper.RatePlayer + $" {name} :");
-                while (!int.TryParse(Console.ReadLine(), out rate))
-                {
-                    Console.WriteLine(ResponsesHelper.ControlRate);
-                    Console.WriteLine(ResponsesHelper.RatePlayer + $" {name} :");
-                }
-                _players.Add(name, rate);
+                Console.WriteLine(StringHelper.NamePlayer + $" {i + 1} :");
+                InitializePlayer(out name, out rate);
+                players.Add(name, rate);
             }
 
-            var BeginBlackJack = new Game(_players);
-            BeginBlackJack.BlackJack();
+            var beginBlackJack = new Game(players);
+            beginBlackJack.BlackJack();
         }
 
-        public static bool NewGame()
+        private static void InitializePlayer( out string name, out int rate)
         {
-            Console.WriteLine(ResponsesHelper.ToContinuePlaying);
+            name = Console.ReadLine();
+            while (String.IsNullOrEmpty(name))
+            {
+                Console.WriteLine(StringHelper.ControlName);
+                name = Console.ReadLine();
+            }
+
+            Console.WriteLine(StringHelper.RatePlayer + $" {name} :");           
+            while (!int.TryParse(Console.ReadLine(), out rate) || rate <= 0)
+            {
+                Console.WriteLine(StringHelper.ControlRate);
+                Console.WriteLine(StringHelper.RatePlayer + $" {name} :");
+            }
+        }
+    
+
+    public static bool NewGame()
+        {
+            Console.WriteLine(StringHelper.ToContinuePlaying);
             string answer = Console.ReadLine();
 
-            if (!(answer == "Y" || answer == "y"))
-            {
-                return false;
-            }
-            return true;
+            return answer.ToLower().ToString() == "y";
         }
     }
 }
