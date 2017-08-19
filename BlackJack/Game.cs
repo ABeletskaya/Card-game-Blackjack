@@ -10,7 +10,7 @@ namespace BlackJack
     {
         private Player _player;
         private Player _croupier;
-        
+
         private Random _random = new Random();
         private Cards[] _cardsDeck = new Cards[52];
 
@@ -22,7 +22,7 @@ namespace BlackJack
 
             _player = new Player(name, rate);
             _croupier = new Player("Croupier");
-        }       
+        }
 
         public double BlackJack()
         {
@@ -33,11 +33,10 @@ namespace BlackJack
             while (_player.MoreCard)
             {
                 Distribution(_player);
-
                 if (_croupier.NumberOfCards == 0)
                 {
                     AddCard(_croupier, true);
-                }           
+                }
             }
             GetResult(_player);
             while (_croupier.SumPoints < 17)
@@ -49,13 +48,13 @@ namespace BlackJack
             _player.Win = _player.Rate * 2 * coeficient;
             PrintResult();
             return _player.Win;
-        }       
+        }
 
         private void FormDeck()
         {
             int index = 0;
             int k = Enum.GetValues(typeof(CardsSuit)).Length;
-            for (int i = 1 ; i <= k; i++)
+            for (int i = 1; i <= k; i++)
             {
                 foreach (var j in Enum.GetValues(typeof(CardsName)))
                 {
@@ -65,7 +64,7 @@ namespace BlackJack
             }
         }
 
-        private void MixDeck() 
+        private void MixDeck()
         {
             int i, j;
             Cards temp;
@@ -126,13 +125,13 @@ namespace BlackJack
 
             Console.WriteLine($"{player.Name}" + StringHelper.MoreCard);
             string answer = Console.ReadLine();
-            if ( ! (answer == "Y" || answer == "y"))
+            if (!(answer.ToLower().ToString() == "y"))
             {
                 player.MoreCard = false;
                 player.NumberOfCards++;
                 return;
-            } 
-            GetCard(player);            
+            }
+            GetCard(player);
         }
 
         private int GetCard(Player player, bool needComment = true)
@@ -147,14 +146,14 @@ namespace BlackJack
             return j;
         }
 
-        private int GiveCardIndex() 
+        private int GiveCardIndex()
         {
             int i = 0;
             while (i < 100)
             {
-               int  j = _random.Next(0, 36);
+                int j = _random.Next(0, 36);
 
-                if (! _cardsDeck[j].isIssued == true)
+                if (!_cardsDeck[j].isIssued == true)
                 {
                     _cardsDeck[j].isIssued = true;
                     return j;
@@ -166,11 +165,11 @@ namespace BlackJack
 
         private void GetResult(Player player)
         {
-            if (player.NumberOfCards == 2 && player.SumPoints == 21)
+            if (player.NumberOfCards < 2 && player.SumPoints == 21)
             {
                 player.Result = StringHelper.BlackJack;
             }
-            if (player.NumberOfCards != 2 && player.SumPoints == 21)
+            if (player.NumberOfCards >= 2 && player.SumPoints == 21)
             {
                 player.Result = StringHelper.TwentyOne;
             }
