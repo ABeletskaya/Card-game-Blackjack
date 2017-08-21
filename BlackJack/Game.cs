@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BlackJack.Models.Enums;
+using System;
 
 namespace BlackJack
 {
@@ -10,16 +7,14 @@ namespace BlackJack
     {
         private Player _player;
         private Player _croupier;
+        private ConsiderWinning _considerWinning;
 
         private Random _random = new Random();
-        private Cards[] _cardsDeck = new Cards[52];
-
-        private ConsiderWinning considerWinning;
+        private Cards[] _cardsDeck = new Cards[52];      
 
         public Game(string name, double rate)
-        {
-            considerWinning = new ConsiderWinning();
-
+        {            
+            _considerWinning = new ConsiderWinning();
             _player = new Player(name, rate);
             _croupier = new Player("Croupier");
         }
@@ -44,8 +39,10 @@ namespace BlackJack
                 AddCard(_croupier, true);
             }
             GetResult(_croupier);
-            var coeficient = considerWinning.CoeficientWin(_croupier, _player);
-            _player.Win = _player.Rate * 2 * coeficient;
+            
+            var coeficient = _considerWinning.CoeficientWin(_croupier, _player);
+            _player.Win = _player.Rate * coeficient;
+
             PrintResult();
             return _player.Win;
         }
@@ -58,7 +55,7 @@ namespace BlackJack
             {
                 foreach (var j in Enum.GetValues(typeof(CardsName)))
                 {
-                    _cardsDeck[index] = new Cards() { suit = (CardsSuit)i, name = (CardsName)j, isIssued = false };
+                    _cardsDeck[index] = new Cards() { Suit = (CardsSuit)i, Name = (CardsName)j, IsIssued = false };
                     index++;
                 }
             }
@@ -80,17 +77,18 @@ namespace BlackJack
 
         private void Distribution(Player player)
         {
-            if (player.NumberOfCards == 0)
-            {
-                Console.WriteLine($"\t{player.Name} player cards:");
-                AddCard(player);
+            if (player.NumberOfCards != 0)
+            {                
                 AddCard(player);
                 ControlMoreCard(player);
-                Console.WriteLine($"The sum of {player.Name} player cards is: {player.SumPoints}\n\n");
                 return;
             }
+
+            Console.WriteLine($"\t{player.Name} player cards:");
+            AddCard(player);
             AddCard(player);
             ControlMoreCard(player);
+            Console.WriteLine($"The sum of {player.Name} player cards is: {player.SumPoints}\n\n");
         }
 
         private static void ControlMoreCard(Player player)
@@ -119,7 +117,7 @@ namespace BlackJack
             if (player.NumberOfCards < 2)
             {
                 int j = GetCard(player, false);
-                Console.Write(_cardsDeck[j].suit + " " + _cardsDeck[j].name);
+                Console.Write(_cardsDeck[j].Suit + " " + _cardsDeck[j].Name);
                 return;
             }
 
@@ -137,12 +135,13 @@ namespace BlackJack
         private int GetCard(Player player, bool needComment = true)
         {
             int j = GiveCardIndex();
-            player.SumPoints += (int)_cardsDeck[j].name;
+            player.SumPoints += (int)_cardsDeck[j].Name;
             player.NumberOfCards++;
 
             if (needComment)
-                Console.WriteLine($"{player.Name} card: {_cardsDeck[j].suit} {_cardsDeck[j].name}; sum = {player.SumPoints}");
-
+            {
+                Console.WriteLine($"{player.Name} card: {_cardsDeck[j].Suit} {_cardsDeck[j].Name}; sum = {player.SumPoints}");
+            }
             return j;
         }
 
@@ -151,11 +150,11 @@ namespace BlackJack
             int i = 0;
             while (i < 100)
             {
-                int j = _random.Next(0, 36);
+                int j = _random.Next(0, 52);
 
-                if (!_cardsDeck[j].isIssued == true)
+                if (!_cardsDeck[j].IsIssued == true)
                 {
-                    _cardsDeck[j].isIssued = true;
+                    _cardsDeck[j].IsIssued = true;
                     return j;
                 }
                 i++;
@@ -167,31 +166,32 @@ namespace BlackJack
         {
             if (player.NumberOfCards < 2 && player.SumPoints == 21)
             {
-                player.Result = StringHelper.BlackJack;
+                player.Result = ResultCombinations.BlackJack;
+                return;
             }
             if (player.NumberOfCards >= 2 && player.SumPoints == 21)
             {
-                player.Result = StringHelper.TwentyOne;
+                player.Result = ResultCombinations.TwentyOne;
+                return;
             }
             if (player.SumPoints > 21)
             {
-                player.Result = StringHelper.ToMany;
+                player.Result = ResultCombinations.ToMany;
+                return;
             }
-            if (player.SumPoints < 21)
-            {
-                player.Result = StringHelper.LessTwentyOne;
-            }
+            player.Result = ResultCombinations.LessTwentyOne;
         }
 
         public void PrintResult()
         {
-            Console.WriteLine("\n");
+            Console.WriteLine("\t\t\t ***");
             Console.WriteLine($"Croupier has {_croupier.Result} and his sum point is {_croupier.SumPoints}");
             Console.WriteLine($"{ _player.Name} -  winnings is {_player.Win} \n" +
-                                          $"(has {_player.SumPoints}, result is {_player.Result} and {compareCroupier(_player)})");
+                                $"(has {_player.SumPoints}, result is {_player.Result} and {CompareCroupier(_player)})");
+            Console.WriteLine("\t\t\t ***");
         }
 
-        public string compareCroupier(Player player)
+        public string CompareCroupier(Player player)
         {
             if (player.SumPoints == _croupier.SumPoints)
             {
@@ -201,11 +201,7 @@ namespace BlackJack
             {
                 return StringHelper.MoreCroupier;
             }
-            if (player.SumPoints < _croupier.SumPoints)
-            {
-                return StringHelper.LessCroupier;
-            }
-            return "";
+            return StringHelper.LessCroupier;
         }
     }
 }

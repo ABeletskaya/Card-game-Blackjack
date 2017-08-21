@@ -1,4 +1,6 @@
-﻿namespace BlackJack
+﻿using BlackJack.Models.Enums;
+
+namespace BlackJack
 {
     class Player
     {
@@ -9,7 +11,7 @@
         public int NumberOfCards { get; set; }        
         public bool MoreCard { get; set; }
 
-        public string Result { get; set; }
+        public ResultCombinations Result { get; set; }
 
         public Player(string name)
         {
@@ -19,7 +21,7 @@
             SumPoints = 0;
             NumberOfCards = 0;
             MoreCard = true;
-            Result = null;              
+            Result = ResultCombinations.LessTwentyOne;              
         }
 
         public Player(string name, double rate)
@@ -30,7 +32,7 @@
             SumPoints = 0;
             NumberOfCards = 0;
             MoreCard = true;
-            Result = null;
+            Result = ResultCombinations.LessTwentyOne;
         }         
     }
 }

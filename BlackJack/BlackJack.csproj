@@ -43,13 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsiderWinning.cs" />
     <Compile Include="InitializeGame.cs" />
     <Compile Include="Models\Cards.cs" />
     <Compile Include="Models\Enums\CardsName.cs" />
     <Compile Include="Models\Enums\CardsSuit.cs" />
     <Compile Include="Models\Enums\CoeficientDouble.cs" />
     <Compile Include="Models\Enums\ActionWithGame.cs" />
-    <Compile Include="Result\ConsiderWinning.cs" />
+    <Compile Include="Models\Enums\ResultCombinations.cs" />
+    <Compile Include="Models\ResultsAndCoefficients.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Program.cs" />

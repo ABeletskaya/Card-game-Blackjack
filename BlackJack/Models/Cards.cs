@@ -2,8 +2,8 @@
 {
     public class Cards
     {
-        public CardsName name;
-        public CardsSuit suit;
-        public bool isIssued;
+        public CardsName Name;
+        public CardsSuit Suit;
+        public bool IsIssued;
     }
 }

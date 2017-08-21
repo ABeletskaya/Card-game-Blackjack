@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace BlackJack.Models.Enums
+﻿namespace BlackJack.Models.Enums
 {
     public enum ActionWithGame
     {       
